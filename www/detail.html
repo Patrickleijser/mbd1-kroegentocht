@@ -4,76 +4,44 @@
         <div class="left"><ons-back-button class="white">Back</ons-back-button></div>
     </ons-toolbar>
 
-    <div class="card" style="background-image: url('{{item.details.photoUrl}}');">
+    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ons-postchange="changeCurrentIndex()">
+        <ons-carousel-item ng-repeat="item in items">
+            <div class="card" style="background-image: url('{{item.details.photoUrl}}');">
 
-        <div class="card-name">{{item.name}}</div>
-        <div class="card-desc">{{item.details.formatted_address}}<br>{{item.details.formatted_phone_number}}</div>
+                <div class="card-name">{{item.name}}</div>
+                <div class="card-desc">{{item.details.formatted_address}}<br>{{item.details.formatted_phone_number}}</div>
 
-    </div>
-
-    <div class="rating"><div class="rating-num">
-        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
-        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
-        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
-        <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
-        <ons-icon icon="fa-star-half" fixed-width="false"></ons-icon>
-        {{item.details.user_ratings_total}}
-    </div></div>
-
-    <ons-list style="border-top: none"><ons-list-item style="line-height: 1; padding: 0;">
-        <ons-row class="action">
-
-            <ons-col class="action-col" ng-click="buttonCall()">
-                <div class="action-icon"><ons-icon icon="ion-ios-telephone"></ons-icon></div>
-                <div class="action-label">Bellen</div>
-            </ons-col>
-
-            <ons-col class="action-col" ng-click="buttonMail()">
-                <div class="action-icon"><ons-icon icon="ion-ios-email"></ons-icon></div>
-                <div class="action-label">E-mail</div>
-            </ons-col>
-
-            <ons-col class="action-col" ng-click="buttonMap()">
-                <div class="action-icon"><ons-icon icon="ion-ios-location"></ons-icon></div>
-                <div class="action-label">Bekijk op kaart</div>
-            </ons-col>
-
-            <ons-col class="action-col" ng-click="buttonWeb()">
-                <div class="action-icon"><ons-icon icon="ion-ios-world"></ons-icon></div>
-                <div class="action-label">Open website</div>
-            </ons-col>
-
-        </ons-row>
-    </ons-list-item></ons-list>
-
-    <!--<ons-list style="margin-top: 12px;">
-        <ons-list-item modifier="chevron">
-            <div class="prop-desc">
-                <ons-icon icon="fa-map-marker"></ons-icon>
-                2-15-13 Hongo Bunkyo Tokyo
             </div>
-        </ons-list-item>
 
-        <ons-list-item modifier="chevron">
-            <div class="prop-desc">
-                <ons-icon icon="fa-mobile"></ons-icon>
-                (111) 123-4567
-            </div>
-        </ons-list-item>
+            <div class="rating"><div class="rating-num">
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star" fixed-width="false"></ons-icon>
+                <ons-icon icon="fa-star-half" fixed-width="false"></ons-icon>
+                {{item.details.user_ratings_total}}
+            </div></div>
 
-        <ons-list-item modifier="chevron">
-            <div class="prop-desc">
-                <ons-icon icon="fa-book"></ons-icon>
-                Store Photos and Menus
-            </div>
-        </ons-list-item>
+            <ons-list style="border-top: none"><ons-list-item style="line-height: 1; padding: 0;">
+                <ons-row class="action">
 
-        <ons-list-item modifier="chevron">
-            <div class="prop-desc">
-                <ons-icon icon="fa-clock-o"></ons-icon>
-                Make a Reservation
-            </div>
-        </ons-list-item>
-    </ons-list>-->
+                    <ons-col class="action-col" ng-show="item.details.formatted_phone_number" ng-click="buttonPress('call', item.details.international_phone_number)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-telephone"></ons-icon></div>
+                        <div class="action-label">Bellen</div>
+                    </ons-col>
 
+                    <ons-col class="action-col" ng-show="item.details.geometry.location.lat" ng-click="buttonPress('geo', item.details.geometry.location.coords)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-location"></ons-icon></div>
+                        <div class="action-label">Bekijk op kaart</div>
+                    </ons-col>
+
+                    <ons-col class="action-col" ng-show="item.details.website" ng-click="buttonPress('web', item.details.website)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-world"></ons-icon></div>
+                        <div class="action-label">Open website</div>
+                    </ons-col>
+
+                </ons-row>
+            </ons-list>
+        </ons-carousel-item>
+    </ons-carousel>
 </ons-page>

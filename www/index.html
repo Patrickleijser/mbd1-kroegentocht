@@ -64,16 +64,28 @@
 <!-- -->
 
 <ons-navigator var="navi">
-    <ons-page>
-        <ons-toolbar>
+    <ons-page ng-controller="MasterController">
+        <ons-toolbar modifier="transparent">
             <div class="center">Kroegentocht</div>
         </ons-toolbar>
 
-        <ons-list ng-controller="MasterController">
-            <ons-list-item modifier="chevron" class="item" ons-lazy-repeat="infiniteScroll" ng-click="showDetail($index)">
+        <div ng-hide="listLoaded" class="text-center">
+            <p><span style='opacity: 0.7;'><ons-icon icon='fa-spinner' spin='true'></ons-icon> Kroegen aan het zoeken...</span></p>
+        </div>
+
+        <ons-pull-hook ng-action="refreshItems($done)" var="loader">
+          <span ng-switch="loader.getCurrentState()">
+            <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Harder trekken</span>
+            <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Laat los om kroegen te laden</span>
+            <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Kroegen laden...</span>
+          </span>
+        </ons-pull-hook>
+
+        <ons-list>
+            <ons-list-item modifier="chevron" class="item" ng-show="listLoaded" ons-lazy-repeat="infiniteScroll" ng-click="showDetail($index)">
                 <ons-row>
                     <ons-col width="80px">
-                        <img ng-src="{{item.icon}}" class="item-thum"></img>
+                        <img ng-src="{{item.icon}}" class="item-thum">
                     </ons-col>
                     <ons-col>
                         <header>
