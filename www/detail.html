@@ -1,12 +1,12 @@
 <ons-page ng-controller="DetailController" modifier="shop-details">
 
     <ons-toolbar modifier="transparent">
-        <div class="left"><ons-back-button class="white">Back</ons-back-button></div>
+        <div class="left"><ons-back-button class="white">Terug</ons-back-button></div>
     </ons-toolbar>
 
     <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ons-postchange="changeCurrentIndex()">
         <ons-carousel-item ng-repeat="item in items">
-            <div class="card" style="background-image: url('{{item.details.photoUrl}}');">
+            <div class="card" img-cache ic-bg="{{item.details.photoUrl}}">
 
                 <div class="card-name">{{item.name}}</div>
                 <div class="card-desc">{{item.details.formatted_address}}<br>{{item.details.formatted_phone_number}}</div>

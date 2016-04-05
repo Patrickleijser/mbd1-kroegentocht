@@ -6,6 +6,8 @@
     text-align: center;
 }
 
+
+/* Details */
 .page--shop-details__content {
     position: absolute;
     left: 0px;
@@ -108,4 +110,44 @@ ons-back-button.white span {
     font-size: 14px;
     vertical-align: -0px;
     opacity: 0.5;
+}
+
+/* Instellingen */
+
+.profile-wrapper {
+    padding: 16px 10px 0 10px;
+}
+
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border: inset 1px rgba(0, 0, 0, 0.3);
+}
+
+.profile-name {
+    font-size: 18px;
+    padding: 4px 0 2px 0;
+}
+
+.profile-email {
+    font-size: 15px;
+    opacity: 0.4;
+}
+
+.switch--list-item {
+    margin-right: 0px;
+}
+
+.settings-header {
+    font-weight: 500;
+    font-size: 14px;
+    opacity: 0.4;
+    padding: 10px 0 0px 10px;
+    margin-bottom: -4px;
+}
+
+.settings-list {
+    margin-top: 10px;
 }

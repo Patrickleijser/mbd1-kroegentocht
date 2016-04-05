@@ -1,6 +1,6 @@
 (function(){
     'use strict';
-    var module = angular.module('app', ['onsen', 'cordovaGeolocationModule']);
+    var module = angular.module('app', ['onsen', 'cordovaGeolocationModule', 'ImgCache']);
 
     /**
      *
@@ -56,7 +56,7 @@
      * App Controller
      *
      */
-    module.controller('AppController', function($scope, $data) {
+    module.controller('AppController', function($scope, $data, ImgCache, sharedProperties) {
         $scope.buttonPress = function(action, value) {
             switch(action) {
                 case 'call':
@@ -76,6 +76,47 @@
                     break;
             }
         };
+
+        $scope.deleteCache = function() {
+
+            ons.notification.confirm({
+                message: 'Weet je zeker dat je het cache geheugen wilt legen?',
+                title: 'Let op',
+                buttonLabels: ['Ja', 'Nee'],
+                animation: 'default', // or 'none'
+                primaryButtonIndex: 1,
+                cancelable: true,
+                callback: function(index) {
+                    if(index === 0) {
+                        sharedProperties.setCacheData(null);
+                        ImgCache.clearCache();
+                        ons.notification.alert({
+                            message: 'Cache verwijderd!'
+                        });
+                    }
+                }
+            });
+
+        };
+
+        $scope.showOptions = function() {
+            $scope.navi.pushPage('options.html', {title : 'Instellingen'});
+        };
+
+        ons.ready(function() {
+            ImgCache.$init();
+
+        });
+
+    });
+
+    /**
+     *
+     * Options Controller
+     *
+     */
+    module.controller('OptionsController', function($scope, $data) {
+
     });
 
     /**
@@ -86,6 +127,7 @@
     module.controller('DetailController', function($scope, $data) {
         $scope.items = $data.items;
         $scope.index = $data.selectedItemIndex;
+
 
         ons.ready(function() {
             setImmediate(function(){
@@ -103,6 +145,7 @@
      */
     module.controller('MasterController', function($scope, $data, $q, $http, sharedProperties) {
         $scope.listLoaded = sharedProperties.getListLoaded();
+        $scope.error = $data.error;
 
         $scope.sharedProperties = sharedProperties;
         $scope.$watch('sharedProperties.getListLoaded()', function(newValue) {
@@ -159,7 +202,7 @@
      * Data method
      *
      */
-    module.factory('$data', function($q, $http, cordovaGeolocationService, sharedProperties) {
+    module.factory('$data', function($q, $http, cordovaGeolocationService, sharedProperties, ImgCache) {
         var data = {};
         data.canceler = $q.defer();
         data.items = [];
@@ -189,7 +232,8 @@
                                 }).success(function(apiData) {
                                     data.items[key].details = apiData.result;
                                     data.items[key].details.geometry.location.coords = data.items[key].details.geometry.location.lat + "," + data.items[key].details.geometry.location.lng;
-                                    data.items[key].details.photoUrl = 'images/test.jpg';
+                                    data.items[key].details.photoUrl = 'http://lorempixel.com/600/400/nightlife/';
+
 
                                     sharedProperties.setCacheDataItem(key, data.items[key]);
                                     /*if($data.items[index].details.hasOwnProperty('photos')) {
@@ -199,7 +243,7 @@
                                     }*/
                                 }).error(function() {
                                     data.items[key].details = {};
-                                    data.items[key].details.photoUrl = 'images/test.jpg';
+                                    data.items[key].details.photoUrl = 'http://lorempixel.com/600/400/nightlife/';
 
                                     sharedProperties.setCacheDataItem(key, data.items[key]);
                                 });
@@ -208,26 +252,14 @@
 
                         })
                         .error(function() {
-                            data.items = [
-                                {
-                                    error: 'Geen kroegen gevonden.'
-                                }
-                            ];
+                            data.error = 'Foutcode 1';
                         });
 
                 }, function(error) {
-                    data.items = [
-                        {
-                            error: 'Uw locatie kan niet gevonden worden.'
-                        }
-                    ];
+                    data.error = error;
                 });
             } else {
-                data.items = [
-                    {
-                        error: 'We hebben geen toegang om je locatie op te vragen.'
-                    }
-                ];
+                data.error = 'Foutcode 2';
             }
         }
 
