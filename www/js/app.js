@@ -41,6 +41,8 @@
      *
      */
     module.controller('AppController', function($scope, $data, ImgCache, sharedProperties) {
+
+        // Button functions
         $scope.buttonPress = function(action, value) {
             switch(action) {
                 case 'call':
@@ -61,6 +63,7 @@
             }
         };
 
+        // Create contact function
         $scope.createContact = function(name, number) {
             var contact = navigator.contacts.create({"displayName": name});
 
@@ -71,6 +74,29 @@
             contact.save();
         };
 
+        // Init image cache library
+        ons.ready(function() {
+            ImgCache.$init();
+
+        });
+
+    });
+
+    /**
+     *
+     * Options Controller
+     *
+     */
+    module.controller('OptionsController', function($scope, sharedProperties) {
+
+        $scope.cacheEnabled = localStorage.cacheEnabled ? (localStorage.cacheEnabled == 'true') : false;
+
+        // Save settings function
+        $scope.saveSettings = function() {
+            localStorage.cacheEnabled = $scope.cacheEnabled;
+        };
+
+        // Delete cache function
         $scope.deleteCache = function() {
 
             ons.notification.confirm({
@@ -93,30 +119,6 @@
 
         };
 
-        $scope.showOptions = function() {
-            $scope.navi.pushPage('options.html', {title : 'Instellingen'});
-        };
-
-        ons.ready(function() {
-            ImgCache.$init();
-
-        });
-
-    });
-
-    /**
-     *
-     * Options Controller
-     *
-     */
-    module.controller('OptionsController', function($scope) {
-
-        $scope.cacheEnabled = localStorage.cacheEnabled ? (localStorage.cacheEnabled == 'true') : false;
-
-        $scope.saveSettings = function() {
-            localStorage.cacheEnabled = $scope.cacheEnabled;
-        };
-
     });
 
     /**
@@ -128,7 +130,7 @@
         $scope.items = $data.items;
         $scope.index = $data.selectedItemIndex;
 
-
+        // Set carousel index
         ons.ready(function() {
             setImmediate(function(){
                 carousel.setActiveCarouselItemIndex($scope.index, {
@@ -146,24 +148,41 @@
     module.controller('MasterController', function($scope, $data, $q, $http, sharedProperties) {
         $scope.listLoaded = sharedProperties.getListLoaded();
         $scope.error = $data.error;
+        $scope.items = $data.items;
 
         $scope.sharedProperties = sharedProperties;
         $scope.$watch('sharedProperties.getListLoaded()', function(newValue) {
             $scope.listLoaded = newValue;
+            $scope.items = $data.items;
+            $scope.$apply();
         });
 
+        // Show details on phone (push page)
         $scope.showDetail = function(index) {
             $data.selectedItem = $data.items[index];
             $data.selectedItemIndex = index;
             $scope.navi.pushPage('detail.html', {title : $data.selectedItem.title});
         };
 
-        $scope.infiniteScroll = {
+        // Show details on tablet (split screen)
+        $scope.showDetailTablet = function(index) {
+            $data.selectedItem = $data.items[index];
+            $data.selectedItemIndex = index;
+            splitView.setMainPage('detail.html');
+        };
+
+        // Show options
+        $scope.showOptions = function() {
+            $scope.navi.pushPage('options.html', {title : 'Instellingen'});
+        };
+
+        // Infinite list
+        /*$scope.infiniteScroll = {
             configureItemScope: function(index, itemScope) {
                 itemScope.canceler = $q.defer();
                 itemScope.item = $data.items[index];
 
-                /*$http.get('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&placeid=' + itemScope.item.place_id, {
+                $http.get('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&placeid=' + itemScope.item.place_id, {
                     timeout: itemScope.canceler.promise
                 }).success(function(data) {
                     console.log(data);
@@ -176,7 +195,7 @@
                     }
                 }).error(function() {
                     $data.items[index].details.photoUrl = 'images/default-header.jpg';
-                });*/
+                });
             },
             calculateItemHeight: function(index) {
                 return 74;
@@ -187,14 +206,7 @@
             destroyItemScope: function(index, scope) {
                 console.log("Destroyed item #" + index);
             }
-        };
-
-        $scope.refreshItems = function($done) {
-            setTimeout(function() {
-                $data.items = $data.items;
-                $done();
-            }, 2000);
-        };
+        };*/
     });
 
     /**
@@ -235,18 +247,17 @@ console.log("DATA");
                                 }).success(function(apiData) {
                                     data.items[key].details = apiData.result;
                                     data.items[key].details.geometry.location.coords = data.items[key].details.geometry.location.lat + "," + data.items[key].details.geometry.location.lng;
-                                    data.items[key].details.photoUrl = 'http://lorempixel.com/600/400/nightlife/';
 
+                                    if(data.items[key].details.hasOwnProperty('photos')) {
+                                        data.items[key].details.photoUrl =  'https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&maxwidth=640&photoreference=' + data.items[key].details.photos[0].photo_reference;
+                                    } else {
+                                        data.items[key].details.photoUrl = 'images/default.jpg';
+                                    }
 
                                     sharedProperties.setCacheDataItem(key, data.items[key]);
-                                    /*if($data.items[index].details.hasOwnProperty('photos')) {
-                                        $data.items[index].details.photoUrl = 'https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&maxwidth=640&photoreference=' + $data.items[index].details.photos[0].photo_reference;
-                                    } else {
-                                        $data.items[index].details.photoUrl = '';
-                                    }*/
                                 }).error(function() {
                                     data.items[key].details = {};
-                                    data.items[key].details.photoUrl = 'http://lorempixel.com/600/400/nightlife/';
+                                    data.items[key].details.photoUrl = 'images/default.jpg';
 
                                     sharedProperties.setCacheDataItem(key, data.items[key]);
                                 });

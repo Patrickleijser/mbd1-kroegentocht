@@ -1,5 +1,5 @@
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="nl.avans.mbd-2085800" version="1.0.0">
-    <name>Kroegen Zoeker</name>
+    <name>Kroegen</name>
     <description>Kroegen in de buurt zoeken.</description>
     <author href="http://www.avans.nl" email="pjcleijs@avans.nl">Patrick Leijser en Ralf Hendriks</author>
     <content src="index.html"/>
@@ -12,6 +12,16 @@
     <plugin name="cordova-plugin-whitelist" version="1"/>
     <plugin name="cordova-plugin-contacts" source="pgb"/>
 
+    <feature name="http://api.phonegap.com/1.0/battery"/>
+    <feature name="http://api.phonegap.com/1.0/camera"/>
+    <feature name="http://api.phonegap.com/1.0/contacts"/>
+    <feature name="http://api.phonegap.com/1.0/file"/>
+    <feature name="http://api.phonegap.com/1.0/geolocation"/>
+    <feature name="http://api.phonegap.com/1.0/media"/>
+    <feature name="http://api.phonegap.com/1.0/network"/>
+    <feature name="http://api.phonegap.com/1.0/notification"/>
+
+    <preference name="permissions" value="none"/>
     <preference name="orientation" value="default"/>
     <preference name="target-device" value="universal"/>
     <preference name="fullscreen" value="true"/>
@@ -35,7 +45,6 @@
     <splash src="splash.png" />
 
     <platform name="android">
-        <!-- you can use any density that exists in the Android project -->
         <splash src="splash.png" density="land-hdpi"/>
         <splash src="splash.png" density="land-ldpi"/>
         <splash src="splash.png" density="land-mdpi"/>
@@ -47,7 +56,6 @@
     </platform>
 
     <platform name="ios">
-        <!-- images are determined by width and height. The following are supported -->
         <splash src="splash.png" width="320" height="480"/>
         <splash src="splash.png" width="640" height="960"/>
         <splash src="splash.png" width="768" height="1024"/>
@@ -59,11 +67,6 @@
         <splash src="splash.png" width="1242" height="2208"/>
         <splash src="splash.png" width="2208" height="1242"/>
     </platform>
-
-
-    <access origin="tel:*" launch-external="yes" />
-    <access origin="geo:*" launch-external="yes" />
-
 
     <allow-intent href="http://*/*"/>
     <allow-intent href="https://*/*"/>
