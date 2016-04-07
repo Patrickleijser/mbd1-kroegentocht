@@ -7,7 +7,7 @@
      * Shared Properties Service
      *
      */
-    app.service('sharedProperties', function() {
+    module.service('sharedProperties', function() {
         var listLoaded = false;
         var cacheData = localStorage.cacheData ? localStorage.cacheData : null;
 
@@ -31,22 +31,6 @@
                 newCacheData.items[index] = value;
                 cacheData = JSON.stringify(newCacheData);
                 localStorage.cacheData = cacheData;
-            },
-            getCacheDataAge: function() {
-
-                // TODO: Fix this function
-                if(cacheData == null)
-                    return 0;
-
-                var difference = parseInt(this.getCacheData().date) - Date.now;
-
-                var daysDifference = Math.floor(difference/1000/60/60/24);
-                difference -= daysDifference*1000*60*60*24
-
-                var hoursDifference = Math.floor(difference/1000/60/60);
-                difference -= hoursDifference*1000*60*60
-
-                return difference;
             }
         }
     });
@@ -125,16 +109,13 @@
      * Options Controller
      *
      */
-    module.controller('OptionsController', function($scope, $data) {
+    module.controller('OptionsController', function($scope) {
 
-    });
+        $scope.cacheEnabled = localStorage.cacheEnabled ? (localStorage.cacheEnabled == 'true') : false;
 
-    /**
-     *
-     * List Controller
-     *
-     */
-    module.controller('ListController', function($scope, $data) {
+        $scope.saveSettings = function() {
+            localStorage.cacheEnabled = $scope.cacheEnabled;
+        };
 
     });
 
