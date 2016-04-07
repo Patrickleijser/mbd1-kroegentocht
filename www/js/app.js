@@ -71,7 +71,15 @@
             phoneNumbers[0] = new ContactField('mobile', number, true);
             contact.phoneNumbers = phoneNumbers;
 
-            contact.save();
+            contact.save(function() {
+                ons.notification.alert({
+                    message: 'Contactpersoon succesvol opgeslagen!'
+                });
+            }, function() {
+                ons.notification.alert({
+                    message: 'Contactpersoon niet opgeslagen!'
+                });
+            });
         };
 
         // Init image cache library
