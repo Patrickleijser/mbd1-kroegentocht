@@ -63,14 +63,6 @@
             }
         };
 
-        navigator.geolocation.watchPosition(function(position) {
-                console.log("i'm tracking you!");
-            },
-            function (error) {
-                if (error.code == error.PERMISSION_DENIED)
-                    console.log("you denied me :-(");
-            });
-
         // Create contact function
         $scope.createContact = function(name, number) {
             var contact = navigator.contacts.create({"displayName": name});
@@ -162,7 +154,6 @@
         $scope.$watch('sharedProperties.getListLoaded()', function(newValue) {
             $scope.listLoaded = newValue;
             $scope.items = $data.items;
-            $scope.$apply();
         });
 
         // Show details on phone (push page)
@@ -184,37 +175,6 @@
             $scope.navi.pushPage('options.html', {title : 'Instellingen'});
         };
 
-        // Infinite list
-        /*$scope.infiniteScroll = {
-            configureItemScope: function(index, itemScope) {
-                itemScope.canceler = $q.defer();
-                itemScope.item = $data.items[index];
-
-                $http.get('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&placeid=' + itemScope.item.place_id, {
-                    timeout: itemScope.canceler.promise
-                }).success(function(data) {
-                    console.log(data);
-                    $data.items[index].details = data.result;
-                    $data.items[index].details.photoUrl = 'images/default-header.jpg';
-                    if($data.items[index].details.hasOwnProperty('photos')) {
-                        $data.items[index].details.photoUrl = 'https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyAX3l5GFtC7mvb6WvMv13Puxk_OsaEVQ3U&maxwidth=640&photoreference=' + $data.items[index].details.photos[0].photo_reference;
-                    } else {
-                        $data.items[index].details.photoUrl = '';
-                    }
-                }).error(function() {
-                    $data.items[index].details.photoUrl = 'images/default-header.jpg';
-                });
-            },
-            calculateItemHeight: function(index) {
-                return 74;
-            },
-            countItems: function() {
-                return $data.items.length;
-            },
-            destroyItemScope: function(index, scope) {
-                console.log("Destroyed item #" + index);
-            }
-        };*/
     });
 
     /**
@@ -226,20 +186,16 @@
         var data = {};
         data.canceler = $q.defer();
         data.items = [];
-console.log("DATA");
+
         if(sharedProperties.getCacheData() != null) {
             data.items = sharedProperties.getCacheData().items;
             sharedProperties.setListLoaded(true);
-            console.log("CACHE");
         } else {
-            console.log("TRY GEO");
             if(cordovaGeolocationService.checkGeolocationAvailability()) {
-                console.log(" GEO AVAILABLE");
                 cordovaGeolocationService.getCurrentPosition(function(position) {
-                    console.log("TRY GET POS");
+
                     $http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCa7_xDOrAkBwMIgCYe3zet8dNZYjLbgII&location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=5000&type=bar|cafe', {timeout: data.canceler.promise})
                         .success(function(apiData) {
-                            console.log("POS SUCCES");
                             sharedProperties.setListLoaded(true);
                             data.items = apiData.results;
 
@@ -274,20 +230,16 @@ console.log("DATA");
 
                         })
                         .error(function() {
-                            console.log("POS ERROR");
-                            data.error = 'Foutcode 1';
+                            data.error = 'Er zijn geen kroegen gevonden.';
                         });
 
                 }, function(error) {
-                    console.log("TRY GET POS ERROR");
-                    data.error = error;
+                    data.error = 'Uw locatie kan niet worden gevonden.';
                 });
             } else {
-                data.error = 'Foutcode 2';
-                console.log("TRY GEO FAILED NOT AVAIL");
+                data.error = "Uw locatie kan niet worden gevonden.";
             }
         }
-        console.log("END DATA");
         return data;
     });
 

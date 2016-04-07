@@ -7,7 +7,7 @@
     <plugin name="cordova-plugin-device" source="pgb"/>
     <plugin name="cordova-plugin-file-transfer" source="pgb"/>
     <plugin name="cordova-plugin-file" source="pgb"/>
-    <plugin name="cordova-plugin-geolocation" source="pgb"/>
+    <plugin name="org.apache.cordova.geolocation" source="pgb"/>
     <plugin name="cordova-plugin-splashscreen" source="pgb"/>
     <plugin name="cordova-plugin-whitelist" version="1"/>
     <plugin name="cordova-plugin-contacts" source="pgb"/>
