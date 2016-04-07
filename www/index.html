@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- JS dependencies (order matters!) -->
-    
+
     <script src="cordova.js"></script>
     <script src="js/platformOverrides.js"></script>
     <script src="lib/angular/angular.js"></script>
@@ -78,29 +78,20 @@
             <p ng-show="error">{{error}}</p>
         </div>
 
-        <ons-pull-hook ng-action="refreshItems($done)" var="loader">
+        <!--<ons-pull-hook ng-action="refreshItems($done)" var="loader">
           <span ng-switch="loader.getCurrentState()">
             <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Harder trekken</span>
             <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Laat los om kroegen te laden</span>
             <span ng-switch-when="action"><ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Kroegen laden...</span>
           </span>
-        </ons-pull-hook>
+        </ons-pull-hook>-->
 
-        <ons-list>
-            <ons-list-item modifier="chevron" class="item" ng-show="listLoaded" ons-lazy-repeat="infiniteScroll" ng-click="showDetail($index)">
-                <ons-row>
-                    <ons-col width="80px">
-                        <img ng-src="{{item.icon}}" class="item-thum">
-                    </ons-col>
-                    <ons-col>
-                        <header>
-                            <span class="item-title">{{item.name}}</span>
-                        </header>
-                        <p class="item-desc">{{ item.vicinity }}</p>
-                    </ons-col>
-                </ons-row>
-            </ons-list-item>
-        </ons-list>
+       <ons-split-view
+                secondary-page="list.html"
+                main-page="detail.html"
+                main-page-width="70%"
+                collapse="width 961px">
+        </ons-split-view>
     </ons-page>
 </ons-navigator>
 

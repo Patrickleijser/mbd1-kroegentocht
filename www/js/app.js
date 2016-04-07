@@ -77,6 +77,16 @@
             }
         };
 
+        $scope.createContact = function(name, number) {
+            var contact = navigator.contacts.create({"displayName": name});
+
+            var phoneNumbers = [];
+            phoneNumbers[0] = new ContactField('mobile', number, true);
+            contact.phoneNumbers = phoneNumbers;
+
+            contact.save();
+        };
+
         $scope.deleteCache = function() {
 
             ons.notification.confirm({
@@ -116,6 +126,15 @@
      *
      */
     module.controller('OptionsController', function($scope, $data) {
+
+    });
+
+    /**
+     *
+     * List Controller
+     *
+     */
+    module.controller('ListController', function($scope, $data) {
 
     });
 

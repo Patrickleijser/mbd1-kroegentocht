@@ -40,6 +40,11 @@
                         <div class="action-label">Open website</div>
                     </ons-col>
 
+                    <ons-col class="action-col"  ng-click="createContact(item.name, item.details.formatted_phone_number)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-world"></ons-icon></div>
+                        <div class="action-label">Contact opslaan</div>
+                    </ons-col>
+
                 </ons-row>
             </ons-list>
         </ons-carousel-item>
