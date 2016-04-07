@@ -63,6 +63,14 @@
             }
         };
 
+        navigator.geolocation.watchPosition(function(position) {
+                console.log("i'm tracking you!");
+            },
+            function (error) {
+                if (error.code == error.PERMISSION_DENIED)
+                    console.log("you denied me :-(");
+            });
+
         // Create contact function
         $scope.createContact = function(name, number) {
             var contact = navigator.contacts.create({"displayName": name});
