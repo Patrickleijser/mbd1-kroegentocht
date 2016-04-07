@@ -225,17 +225,20 @@
         var data = {};
         data.canceler = $q.defer();
         data.items = [];
-
+console.log("DATA");
         if(sharedProperties.getCacheData() != null) {
             data.items = sharedProperties.getCacheData().items;
             sharedProperties.setListLoaded(true);
+            console.log("CACHE");
         } else {
+            console.log("TRY GEO");
             if(cordovaGeolocationService.checkGeolocationAvailability()) {
+                console.log(" GEO AVAILABLE");
                 cordovaGeolocationService.getCurrentPosition(function(position) {
-
+                    console.log("TRY GET POS");
                     $http.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCa7_xDOrAkBwMIgCYe3zet8dNZYjLbgII&location=' + position.coords.latitude + ',' + position.coords.longitude + '&radius=5000&type=bar|cafe', {timeout: data.canceler.promise})
                         .success(function(apiData) {
-
+                            console.log("POS SUCCES");
                             sharedProperties.setListLoaded(true);
                             data.items = apiData.results;
 
@@ -271,17 +274,20 @@
 
                         })
                         .error(function() {
+                            console.log("POS ERROR");
                             data.error = 'Foutcode 1';
                         });
 
                 }, function(error) {
+                    console.log("TRY GET POS ERROR");
                     data.error = error;
                 });
             } else {
                 data.error = 'Foutcode 2';
+                console.log("TRY GEO FAILED NOT AVAIL");
             }
         }
-
+        console.log("END DATA");
         return data;
     });
 
