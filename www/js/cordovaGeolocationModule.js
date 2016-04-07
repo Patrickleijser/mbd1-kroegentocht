@@ -31,22 +31,26 @@ cordovaGeolocationModule.factory('cordovaGeolocationService', ['$rootScope', '$l
 
         getCurrentPosition: function (successCallback, errorCallback, options) {
             $log.debug('cordovaGeolocationService.getCurrentPosition.');
-
+console.log('START Module GEO');
             // Checking API availability
             if (!this.checkGeolocationAvailability()) {
                 return;
             }
-
+console.log('START API CALL');
             // API call
             navigator.geolocation.getCurrentPosition(
                 function (position) {
+                    console.log('YAY');
                     $rootScope.$apply(successCallback(position));
                 },
                 function (error) {
+                    console.log('NO');
                     $rootScope.$apply(errorCallback(error));
                 },
                 options
             );
+
+            console.log('END OF ENDINGZ');
         },
 
         watchPosition: function (successCallback, errorCallback, options) {
