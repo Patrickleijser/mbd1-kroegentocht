@@ -235,7 +235,7 @@
 
                 }, function(error) {
                     data.error = 'Uw locatie kan niet worden gevonden.';
-                });
+                }, null);
             } else {
                 data.error = "Uw locatie kan niet worden gevonden.";
             }
