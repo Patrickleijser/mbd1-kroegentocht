@@ -62,6 +62,8 @@
         <splash src="splash.png" width="2208" height="1242"/>
     </platform>
 
+    <access origin="*" />
+    
     <allow-intent href="http://*/*"/>
     <allow-intent href="https://*/*"/>
     <allow-intent href="tel:*"/>
