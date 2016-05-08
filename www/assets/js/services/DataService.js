@@ -1,4 +1,4 @@
-angular.module('app').factory('DataService', function($q, $http) {
+angular.module('app').factory('DataService', function($q, $http, SharedPropertiesService) {
 
     // Vars
     var _googleApiKey = 'AIzaSyCa7_xDOrAkBwMIgCYe3zet8dNZYjLbgII';
@@ -7,21 +7,28 @@ angular.module('app').factory('DataService', function($q, $http) {
     var getRaces = function() {
         var deferred = $q.defer();
 
-        var req = {
-            method: 'GET',
-            url: 'https://vast-journey-84913.herokuapp.com/races',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: ''
+        if(SharedPropertiesService.getCacheData() != null) {
+            console.log('CACHE');
+            deferred.resolve(SharedPropertiesService.getCacheData());
+        } else {
+            var req = {
+                method: 'GET',
+                url: 'https://vast-journey-84913.herokuapp.com/races',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: ''
+            }
+
+            $http(req).then(function(res){
+                console.log(res.data);
+                deferred.resolve(res.data);
+                SharedPropertiesService.setCacheData(res.data)
+            }, function(){
+                deferred.resolve('Er zijn geen races gevonden.');
+            });
         }
 
-        $http(req).then(function(res){
-            console.log(res.data);
-            deferred.resolve(res.data);
-        }, function(){
-            deferred.resolve('Er zijn geen races gevonden.');
-        });
 
         return deferred.promise;
     };

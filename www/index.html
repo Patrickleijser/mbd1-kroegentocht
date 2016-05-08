@@ -46,6 +46,7 @@
 
 <ons-navigator var="navi">
     <ons-page ng-controller="MasterController">
+
         <ons-toolbar modifier="transparent">
             <div class="left">
                 <ons-toolbar-button ng-click="addRace()"><ons-icon icon="ion-plus-round" style="vertical-align: -4px; font-size: 28px;"></ons-icon></ons-toolbar-button>
@@ -57,8 +58,16 @@
         </ons-toolbar>
 
         <ons-page>
+            <ons-pull-hook ng-action="refreshItems($done)" var="loader">
+                <span ng-switch="loader.getCurrentState()">
+                    <span ng-switch-when="initial"><ons-icon size="35px" icon="ion-arrow-down-a"></ons-icon> Harder trekken</span>
+                    <span ng-switch-when="preaction"><ons-icon size="35px" icon="ion-arrow-up-a"></ons-icon> Laat los voor races te zoeken</span>
+                    <span ng-switch-when="action"><!--<ons-icon size="35px" spin="true" icon="ion-load-d"></ons-icon> Kroegenraces aan het herladen...--></span>
+                </span>
+            </ons-pull-hook>
+
             <div ng-hide="items" class="text-center">
-                <p><span style='opacity: 0.7;' ng-hide="error"><ons-icon icon='fa-spinner' spin='true'></ons-icon> Kroegen aan het zoeken...</span></p>
+                <p><span style='opacity: 0.7;' ng-hide="error"><ons-icon icon='fa-spinner' spin='true'></ons-icon> Kroegenraces aan het zoeken...</span></p>
                 <p ng-show="error">{{error}}</p>
             </div>
 

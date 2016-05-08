@@ -1,7 +1,7 @@
 (function(){
     'use strict';
 
-    angular.module('app').controller('MasterController', function($scope, DataService, cordovaGeolocationService) {
+    angular.module('app').controller('MasterController', function($scope, DataService, cordovaGeolocationService, SharedPropertiesService) {
         //$scope.error = $data.error;
 
         // Get races
@@ -61,6 +61,15 @@
                     message: 'Uw locatie kan niet worden gevonden. (#2)'
                 });
             }
+        };
+
+        $scope.refreshItems = function($done) {
+            $scope.items = null;
+            SharedPropertiesService.setCacheData(null);
+            DataService.getRaces().then(function(data) {
+                $scope.items = data;
+                $done();
+            });
         };
 
         $scope.refreshRaces();
