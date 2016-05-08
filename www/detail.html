@@ -1,10 +1,39 @@
 <ons-page ng-controller="DetailController" modifier="shop-details">
 
-    <ons-toolbar modifier="transparent">
-        <div class="left"><ons-back-button class="white">Terug</ons-back-button></div>
+    <ons-toolbar>
+        <div class="left"><ons-back-button>Terug</ons-back-button></div>
+        <div class="center">{{item.name}}</div>
     </ons-toolbar>
 
-    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ons-postchange="changeCurrentIndex()">
+    <ons-list style="margin-top: 44px;"><ons-list-item style="line-height: 1; padding: 0;">
+        <ons-row class="action">
+
+            <ons-col class="action-col" ng-click="openMap()">
+                <div class="action-icon"><ons-icon icon="ion-ios-location"></ons-icon></div>
+                <div class="action-label">Bekijk op kaart</div>
+            </ons-col>
+
+            <ons-col class="action-col" ng-click="openBars()">
+                <div class="action-icon"><ons-icon icon="ion-ios-list"></ons-icon></div>
+                <div class="action-label">Kroegen</div>
+            </ons-col>
+
+        </ons-row>
+    </ons-list>
+
+    <div class="settings-header">Voortgang</div>
+
+    <ons-list modifier="inset" class="settings-list">
+        <ons-list-item modifier="tappable" ng-repeat="bar in item.bars">
+            <label class="checkbox checkbox--noborder checkbox--list-item">
+                <input type="checkbox" ng-model="bar.visited" ng-change="changeVisited(bar)" ng-disabled="bar.visited">
+                <div class="checkbox__checkmark checkbox--noborder checkbox--list-item__checkmark"></div>
+                {{bar.bar[0].name}}
+            </label>
+        </ons-list-item>
+    </ons-list>
+
+    <!--<ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel" ons-postchange="changeCurrentIndex()">
         <ons-carousel-item ng-repeat="item in items">
             <div class="card" img-cache ic-bg="{{item.details.photoUrl}}">
 
@@ -48,5 +77,5 @@
                 </ons-row>
             </ons-list>
         </ons-carousel-item>
-    </ons-carousel>
+    </ons-carousel>-->
 </ons-page>

@@ -1,0 +1,43 @@
+<ons-page ng-controller="BarsController" modifier="shop-details">
+
+    <ons-toolbar modifier="transparent">
+        <div class="left"><ons-back-button class="white">Terug</ons-back-button></div>
+    </ons-toolbar>
+
+    <ons-carousel fullscreen swipeable overscrollable auto-scroll var="carousel">
+        <ons-carousel-item ng-repeat="item in items">
+            <div class="card big" img-cache ic-bg="{{item.bar[0].details.photoUrl}}">
+
+                <div class="card-name">{{item.bar[0].name}}</div>
+                <div class="card-desc">{{item.bar[0].details.formatted_address}}<br>{{item.bar[0].details.formatted_phone_number}}</div>
+
+            </div>
+
+            <ons-list style="border-top: none"><ons-list-item style="line-height: 1; padding: 0;">
+                <ons-row class="action">
+
+                    <ons-col class="action-col" ng-show="item.bar[0].details.formatted_phone_number" ng-click="buttonPress('call', item.bar[0].details.international_phone_number)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-telephone"></ons-icon></div>
+                        <div class="action-label">Bellen</div>
+                    </ons-col>
+
+                    <ons-col class="action-col" ng-show="item.bar[0].details.geometry.location.lat" ng-click="buttonPress('geo', item.bar[0].details.geometry.location.lat + ',' + item.bar[0].details.geometry.location.lng)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-location"></ons-icon></div>
+                        <div class="action-label">Bekijk op kaart</div>
+                    </ons-col>
+
+                    <ons-col class="action-col" ng-show="item.bar[0].details.website" ng-click="buttonPress('web', item.bar[0].details.website)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-world"></ons-icon></div>
+                        <div class="action-label">Open website</div>
+                    </ons-col>
+
+                    <ons-col class="action-col"  ng-show="item.bar[0].details.formatted_phone_number" ng-click="createContact(item.bar[0].name, item.bar[0].details.formatted_phone_number)">
+                        <div class="action-icon"><ons-icon icon="ion-ios-world"></ons-icon></div>
+                        <div class="action-label">Contact opslaan</div>
+                    </ons-col>
+
+                </ons-row>
+            </ons-list>
+        </ons-carousel-item>
+    </ons-carousel>
+</ons-page>
