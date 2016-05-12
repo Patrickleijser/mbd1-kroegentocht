@@ -5,7 +5,11 @@
         //$scope.error = $data.error;
 
         // Get races
-        $scope.refreshRaces = function() {
+        $scope.refreshRaces = function(resetCache) {
+            if(resetCache) {
+                SharedPropertiesService.setCacheData(null);
+            }
+
             DataService.getRaces().then(function(data) {
                 $scope.items = data;
             });
@@ -38,7 +42,7 @@
 
                             if(value != '') {
                                 DataService.addRace(value, position.coords.latitude, position.coords.longitude).then(function(data) {
-                                    $scope.refreshRaces();
+                                    $scope.refreshRaces(true);
                                 });
 
                                 ons.notification.alert({
@@ -72,7 +76,7 @@
             });
         };
 
-        $scope.refreshRaces();
+        $scope.refreshRaces(false);
 
     });
 
